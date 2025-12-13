@@ -30,10 +30,12 @@ jobs:
         run: echo "This is the DEV branch"
 
       - name: Logical OR (||) example
-        run: echo "Environment: ${{ github.event.inputs.environment || 'production' }}"
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment || 'production' }}"
 
       - name: format() example
-        run: echo "${{ format('Image tag: {0}:{1}', github.repository, github.sha) }}"
+        run: |
+          echo "${{ format('Image tag: {0}:{1}', github.repository, github.sha) }}"
 
       - name: success() example
         if: success()
