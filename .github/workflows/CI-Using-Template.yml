@@ -1,0 +1,18 @@
+name: Cache Node.js dependencies
+
+on:
+#   push:
+#     branches: [ "main" ]
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    uses: mohammedd2510/Reusable-Workflows-Custom-Actions/.github/workflows/CI-Template.yml@main
+    with:
+      node-version: '20'
+      image_name: "react-app-cicd"
+      secrets:
+        DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+    
+
