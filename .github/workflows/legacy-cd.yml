@@ -1,0 +1,22 @@
+name: Legacy CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Legacy CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Deploy application
+        run: echo "deploying to server"
