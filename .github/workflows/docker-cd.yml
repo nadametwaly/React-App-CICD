@@ -1,9 +1,5 @@
 name: Docker CD Pipeline
 
-permissions:
-  actions: read
-  contents: read
-
 on:
   workflow_run:
     workflows: ["Docker CI Pipeline"]
@@ -16,16 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH into Server
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            docker login ghcr.io -u ${{ github.actor }} -p ${{
-            secrets.GITHUB_TOKEN }}
-            docker stop react-app || true
-            docker rm react-app || true
-            docker run -d -p 8080:80 --name "react-app" \
-            ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull Docker image
+        run: |
+          IMAGE=ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          echo "Pulling image $IMAGE"
+          docker pull $IMAGE
+      - name: Run Docker container
+        run: |
+          IMAGE=ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          docker run -d --name test-container -p 8080:80 $IMAGE
+          sleep 5 
+      - name: Test application
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          echo "HTTP response code: $RESPONSE"
+          if [ "$RESPONSE" != "200" ]; then
+            echo "Application test failed!"
+            docker logs test-container
+            exit 1
+          fi
+      - name: Clean up
+        run: |
+          docker stop test-container
+          docker rm test-container
