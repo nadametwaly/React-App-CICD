@@ -1,5 +1,9 @@
 name: Legacy CD Pipeline
 
+permissions:
+  actions: read
+  contents: read
+
 on:
   workflow_run:
     workflows: ["Legacy CI Pipeline"]
