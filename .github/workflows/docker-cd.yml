@@ -1,6 +1,6 @@
 name: Docker CD Pipeline
 
-on:
+on:             #or needs: in the job(deploy)
   workflow_run:
     workflows: ["Docker CI Pipeline"]
     types:
@@ -41,3 +41,17 @@ jobs:
         run: |
           docker stop test-container
           docker rm test-container
+          
+    #if you have public server access
+    #steps:
+    # - name: SSH into server
+    #   uses: appleboy/ssh-action@v1.0.3
+    #   with:
+    #     host: ${{ vars.SSH_HOST }}
+    #     username: ${{ vars.SSH_USER }}
+    #    key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     script: |
+    #         docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+    #         docker stop react-app || true
+    #         docker rm react-app || true
+    #         docker run -d -p 8080:80 --name "react-app" ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}

@@ -1,8 +1,10 @@
 name: Docker CI Pipeline
 
 on: [push, pull_request]
+
 permissions:
   packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,9 +31,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           push: true
-          tags: |
-            ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
-            ghcr.io/${{ github.actor }}/react-app-cicd:latest
+          tags: ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }},ghcr.io/${{ github.actor }}/react-app-cicd:latest
           context: .
       - name: Output image details
         run: |

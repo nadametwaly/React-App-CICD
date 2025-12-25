@@ -1,0 +1,117 @@
+name: Two-EC2s-Workflow-Dispatch-CICD
+on:
+workflow_dispatch:
+  inputs:
+    environment:
+      description: 'Environment to deploy to'
+      required: true
+      type: choice
+      options:
+        - staging
+        - production
+permissions:
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6.1.0
+        with:
+          node-version: 20
+      - name: Installing Dependencies
+        run: npm install
+      - name: Lint Phase
+        run: npm run lint
+      - name: Unit Test
+        run: npm run test
+      - name: Building Static Files
+        run: npm run build
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6.18.0
+        with:
+          push: true
+          tags: |
+            ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+            ghcr.io/${{ github.actor }}/react-app-cicd:latest
+        context: .
+  
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.environment == 'production'
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull Docker image
+        run: |
+          IMAGE=ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          echo "Pulling image $IMAGE"
+          docker pull $IMAGE
+      - name: Run Docker container
+        run: |
+          IMAGE=ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          docker run -d --name test-container -p 8080:80 $IMAGE
+          sleep 5 
+      - name: Test application
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          echo "HTTP response code: $RESPONSE"
+          if [ "$RESPONSE" != "200" ]; then
+            echo "Application test failed!"
+            docker logs test-container
+            exit 1
+          fi
+      - name: verify
+        run: echo "deploying to staging environment"
+      - name: Clean up
+        run: |
+          docker stop test-container
+          docker rm test-container
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.environment == 'staging'
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull Docker image
+        run: |
+          IMAGE=ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          echo "Pulling image $IMAGE"
+          docker pull $IMAGE
+      - name: Run Docker container
+        run: |
+          IMAGE=ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
+          docker run -d --name test-container -p 8080:80 $IMAGE
+          sleep 5 
+      - name: Test application
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          echo "HTTP response code: $RESPONSE"
+          if [ "$RESPONSE" != "200" ]; then
+            echo "Application test failed!"
+            docker logs test-container
+            exit 1
+          fi
+      - name: verify
+        run: echo "deploying to production environment"
+      - name: Clean up
+        run: |
+          docker stop test-container
+          docker rm test-container
+
