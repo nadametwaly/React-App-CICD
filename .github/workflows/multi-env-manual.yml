@@ -1,14 +1,14 @@
-name: Two-EC2s-Workflow-Dispatch-CICD
+name: Multi-Environment Deployment with Workflow dispatch
 on:
-workflow_dispatch:
-  inputs:
-    environment:
-      description: 'Environment to deploy to'
-      required: true
-      type: choice
-      options:
-        - staging
-        - production
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
 permissions:
   packages: write
 jobs:
@@ -39,7 +39,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
             ghcr.io/${{ github.actor }}/react-app-cicd:latest
-        context: .
+            context: .
   
   deploy-staging:
     runs-on: ubuntu-latest
