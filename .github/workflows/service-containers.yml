@@ -15,6 +15,27 @@ jobs:
         image: httpd:2.4
 
     steps:
+      - name: Wait for services to start
+        run: |
+          echo "Waiting for services to start..."
+          # Wait until NGINX responds
+          for i in {1..10}; do
+            if curl -s http://nginx > /dev/null; then
+              echo "NGINX is up!"
+              break
+            fi
+            echo "Waiting for NGINX..."
+            sleep 2
+          done
+          # Wait until Apache responds
+          for i in {1..10}; do
+            if curl -s http://apache > /dev/null; then
+              echo "Apache is up!"
+              break
+            fi
+            echo "Waiting for Apache..."
+            sleep 2
+          done
       - name: Check NGINX Service
         run: |
           echo "Checking NGINX service..."
