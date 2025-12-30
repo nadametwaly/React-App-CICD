@@ -38,8 +38,8 @@ jobs:
     container:
         image: ghcr.io/railwayapp/cli:latest
     env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        SVC_NAME: react-app
+        RAILWAY_TOKEN: ${{ secrets.API_TOKEN }}
+        SVC_NAME: react-app-cicd
     steps:
         - name: Deploy Docker Image to Railway
           run: |
