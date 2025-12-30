@@ -1,0 +1,30 @@
+name: Service Containers Practice
+on: 
+    push:
+    workflow_dispatch:
+permissions:
+  packages: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    services:
+      nginx:
+        image: nginx:alpine
+        ports:
+          - 80:80
+
+      apache:
+        image: httpd:2.4
+        ports:
+          - 80:80
+
+    steps:
+      - name: Check NGINX Service
+        run: |
+          echo "Checking NGINX service..."
+          curl -f http://nginx
+
+      - name: Check Apache Service
+        run: |
+          echo "Checking Apache service..."
+          curl -f http://apache
