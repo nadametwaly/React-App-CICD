@@ -1,0 +1,38 @@
+name: Matrix Strategy Feature Practice
+
+on:
+  workflow_dispatch:
+
+jobs: 
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true          # Stop all remaining matrix jobs if any fail
+      max-parallel: 2          # Only 2 jobs run in parallel
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [16, 18, 20]
+        exclude:
+          - os: windows-latest
+            node: 16
+        include:
+          - os: ubuntu-latest
+            node: 21
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Display environment info
+        run: |
+          echo "Running on OS: ${{ matrix.os }}"
+          echo "Node.js version: ${{ matrix.node }}"
+          node -v
+          npm -v
+
+      - name: Run dummy test
+        run: echo "Running dummy test on ${{ matrix.os }} with Node.js ${{ matrix.node }}"
