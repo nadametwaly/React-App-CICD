@@ -7,16 +7,12 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    services:
+    services:   #Default container port 80 is already exposed internally
       nginx:
         image: nginx:alpine
-        ports:
-          - 80:80
 
       apache:
         image: httpd:2.4
-        ports:
-          - 80:80
 
     steps:
       - name: Check NGINX Service
