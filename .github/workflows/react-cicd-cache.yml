@@ -1,4 +1,4 @@
-name: Add Caching to an Existing React CI Pipeline
+name: Cache Node.js dependencies
 
 on: [push, pull_request]
 jobs:
