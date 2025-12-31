@@ -20,6 +20,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Installing Dependencies
+        if: steps.cache-node.outputs.cache.hit != 'true'
         run: npm install
       - name: lint Phase
         run:  npm run lint
