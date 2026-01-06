@@ -1,4 +1,4 @@
-name: Docker CI Pipeline
+name: Docker CI Pipeline on self-hosted runner
 
 on: [push, pull_request]
 
@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: linux-vm             #ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v6.1.0
