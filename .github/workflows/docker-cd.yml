@@ -2,7 +2,7 @@ name: Docker CD Pipeline on self-hosted runner
 
 on:             #or needs: in the job(deploy)
   workflow_run:
-    workflows: ["Docker CI Pipeline"]
+    workflows: ["Docker CI Pipeline on self-hosted runner"]
     types:
       - completed
 
