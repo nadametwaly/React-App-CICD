@@ -1,4 +1,4 @@
-name: Docker CI Pipeline on self-hosted runner
+name: Docker CI Pipeline
 
 on: [push, pull_request]
 
