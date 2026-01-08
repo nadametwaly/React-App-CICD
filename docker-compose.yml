@@ -1,0 +1,17 @@
+version: '2.3'
+services:
+  worker:
+    image: myoung34/github-runner:latest
+    environment:
+      REPO_URL: https://github.com/nadametwaly/React-App-CICD
+      RUNNER_NAME_PREFIX: docker
+      RUNNER_TOKEN: AVKHH7KTODQLU4RRUYV5JLLJMAJXO
+      RUNNER_WORKDIR: /tmp/runner/work
+      RUNNER_GROUP: default
+      RUNNER_SCOPE: 'repo'
+      LABELS: linux,x64,gpu,docker
+      DISABLE_AUTOMATIC_DEREGISTRATION: 'false'
+    security_opt:
+      - label:disable
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
