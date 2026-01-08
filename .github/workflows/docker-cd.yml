@@ -1,15 +1,15 @@
-name: Docker CD Pipeline on self-hosted runner
+name: Docker CD Pipeline
 
 on:             #or needs: in the job(deploy)
   workflow_run:
-    workflows: ["Docker CI Pipeline on self-hosted runner"]
+    workflows: ["Docker CI Pipeline"]
     types:
       - completed
 
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: docker
+    runs-on: self-hosted
 
     steps:
       - name: Log in to GitHub Container Registry
