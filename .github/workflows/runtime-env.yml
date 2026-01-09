@@ -1,0 +1,17 @@
+name: Runtime Environment Variables
+on:
+    workflow_dispatch:
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+            GREETING: "Hello, GitHub Actions!"
+        steps:
+          - name: prints the value of the GREETING variable to the console
+            run: |
+                echo " $GREETING "
+          - name: modifies the value of GREETING
+            run: |
+                echo "GREETING=Hello, Nada!" >> $GITHUB_ENV
+          - name: print the updated GREETING
+            run: echo "$GREETING"
