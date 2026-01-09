@@ -1,0 +1,23 @@
+name: CI Pipeline using composite action
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node & Install Deps
+        uses: nadametwaly/Reusable-Workflows-Custom-Actions/.github/actions/setup-node-deps@main
+        with:
+          node_version: 18
+          cache_path: |
+            node_modules
+            ~/.npm
+
+      - name: Run Tests
+        run: npm test
