@@ -1,0 +1,12 @@
+name: CI using React Template
+on:
+  workflow_dispatch:
+permissions:
+  packages: write
+jobs:
+  React-CI:
+    uses: https://github.com/nadametwaly/Reusable_workflows-github-actions/blob/main/CI-using-React-template.yml
+      node_version: '20'
+      docker_image_name: React-App-CICD
+    secrets:
+      docker_password: ${{ secrets.GITHUB.TOKEN }}
