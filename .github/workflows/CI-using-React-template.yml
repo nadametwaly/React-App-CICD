@@ -5,7 +5,7 @@ permissions:
   packages: write
 jobs:
   React-CI:
-    uses: nadametwaly/Reusable_workflows-github-actions/.github/workflows/React-CI-Template.yml@main
+    uses: nadametwaly/Reusable-Workflows-Custom-Actions/.github/workflows/React-CI-Template.yml@main
     with:
       node-version: '20'
       lint_phase: true
