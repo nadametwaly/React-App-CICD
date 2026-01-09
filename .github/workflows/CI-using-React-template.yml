@@ -5,13 +5,14 @@ permissions:
   packages: write
 jobs:
   React-CI:
-    uses: nadametwaly/Reusable_workflows-github-actions/.github/workflows/CI-using-React-template.yml@main
+    uses: nadametwaly/Reusable_workflows-github-actions/.github/workflows/React-CI-Template.yml@main
     with:
-      node_version: '20'
+      node-version: '20'
       lint_phase: true
       unit_test: true
+      docker_registry: ghcr.io
       docker_image_name: React-App-CICD
-      Docker_Registry: ghcr.io
+      
       Docker_Username: ${{ github.actor }}
     secrets:
-      docker_password: ${{ secrets.GITHUB_TOKEN }}
+      docker_password: ${{ secrets.GITHUB_TOKEN }} 
