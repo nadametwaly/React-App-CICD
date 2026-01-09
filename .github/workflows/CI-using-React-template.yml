@@ -11,7 +11,7 @@ jobs:
       lint_phase: true
       unit_test: true
       docker_registry: ghcr.io
-      docker_image_name: React-App-CICD
+      docker_image_name: react-app-cicd
       docker_image_tag: latest
       
       Docker_Username: ${{ github.actor }}
