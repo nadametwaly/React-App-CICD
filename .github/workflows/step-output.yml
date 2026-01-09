@@ -14,8 +14,7 @@ jobs:
           - name: check the value of random_number
             if: ${{ steps.generate.outputs.random_number > 5 }}
             run: |
-                run: |
-                    echo "Random number is greater than 5: ${{ steps.generate.outputs.random_number }}"
+                echo "Random number is greater than 5: ${{ steps.generate.outputs.random_number }}"
           - name: Workflow completed
             if: always()
             run: |
