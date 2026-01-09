@@ -10,12 +10,12 @@ jobs:
           - name: Generate message
             id: set-message
             run: |
-                echo "message=Hello from Job 1!" >> $GITHUB_OUTPUT
+                echo "Job 1 step output: Hello from Job 1!" >> $GITHUB_OUTPUT
     consume-message:
         runs-on: ubuntu-latest
         needs: generate-message
         steps:
           - name: Print message from previous job
             run: |
-                echo "Message from Job 1: ${{ needs.generate-message.outputs.job_message }}"
+                echo "Job 2 received message: ${{ needs.generate-message.outputs.job_message }}"
 
