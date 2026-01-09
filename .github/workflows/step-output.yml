@@ -12,9 +12,8 @@ jobs:
                 echo "Generated random number: $random_number"
                 echo "random_number=$random_number" >> $GITHUB_OUTPUT
           - name: check the value of random_number
-            id: check
             run: |
-                if {{ steps.generate.outputs.random_number > 5 }}
+                if ${{ steps.generate.outputs.random_number > 5 }}
                 run: |
                     echo "Random number is greater than 5: $steps.generate.outputs.random_number"
           - name: Workflow completed
