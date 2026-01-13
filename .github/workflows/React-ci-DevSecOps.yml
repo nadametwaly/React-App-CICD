@@ -55,7 +55,7 @@ jobs:
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
-            sarif_file: Gitleaks-results.sarif
+            sarif_file: gitleaks-results.sarif
             
   
   
