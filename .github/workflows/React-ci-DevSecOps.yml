@@ -46,17 +46,13 @@ jobs:
         with:
             sarif_file: 'trivy-results.sarif'
 
-      - name: Run Gitleaks  #for secrets
+      - name: Run Gitleaks for secret detection
         uses: gitleaks/gitleaks-action@v2
-        with:
-          format: sarif
-          output: gitleaks-results.sarif
-        continue-on-error: true  #runs despite issues
-      - name: Upload SARIF to GitHub
+        continue-on-error: true
+      - name: Upload Gitleaks results to GitHub
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-            sarif_file: gitleaks-results.sarif
-            
-  
+          sarif_file: results.sarif
+          category: gitleaks
   
